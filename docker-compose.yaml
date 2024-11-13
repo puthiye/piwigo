@@ -1,0 +1,31 @@
+---
+services:
+  piwigo:
+    image: lscr.io/linuxserver/piwigo:latest
+    container_name: piwigo
+    depends_on:
+      - mariadb2
+    environment:
+      - PUID=1006
+      - PGID=996
+      - TZ=Europe/London
+    volumes:
+      - /etc/piwigo:/config
+      - /tmp/gallery:/gallery
+    ports:
+      - 8885:80
+    restart: unless-stopped
+  mariadb2:
+    image: lscr.io/linuxserver/mariadb:latest
+    container_name: piwigo_db
+    environment:
+      - PUID=1006
+      - PGID=996
+      - MYSQL_ROOT_PASSWORD=MYsql1212
+      - TZ=Europe/London
+      - MYSQL_DATABASE=piwigo
+      - MYSQL_USER=piwigo
+      - MYSQL_PASSWORD=piwigo
+    volumes:
+      - /tmp/db:/config
+    restart: unless-stopped
